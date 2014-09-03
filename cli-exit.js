@@ -43,8 +43,8 @@
 	@include:
 	@end-include
 */
-var cliExit = function cliExit( line, commandLineInterface, cliEnvironmentVariableSet ){
-	if( EXIT_COMMAND_PATTERN.test( line ) ){
+var cliExit = function cliExit( ){
+	/*if( EXIT_COMMAND_PATTERN.test( line ) ){
 		var exitCode = line.match( EXIT_COMMAND_PATTERN )[ 1 ];
 		try{
 			exitCode = parseInt( exitCode );
@@ -58,7 +58,7 @@ var cliExit = function cliExit( line, commandLineInterface, cliEnvironmentVariab
 		exitCode = exitCode || 0;
 		
 		process.exit( exitCode );
-	}
+	}*/
 };
 
 const EXIT_COMMAND_PATTERN = /^\@exit(?:\:(\d+)|$)/;
