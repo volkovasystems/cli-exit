@@ -43,22 +43,34 @@
 	@include:
 	@end-include
 */
-var cliExit = function cliExit( ){
-	/*if( EXIT_COMMAND_PATTERN.test( line ) ){
-		var exitCode = line.match( EXIT_COMMAND_PATTERN )[ 1 ];
-		try{
-			exitCode = parseInt( exitCode );
+var cliExit = function cliExit( CLI, specificNamespace ){
 
-		}catch( error ){
-			console.warn( "an error was encountered due to an invalid exit code that was passed" );
-			console.warn( "please disregard this error for debugging purposes only" );
-			console.error( error );
-		}
+	CLI.SESSION.CLI_EXIT = "cli-exit";
+	
+	this.listenToEvent( CLI.EVENT.LINE_STRING_MODIFIED, specificNamespace,
+		function cliExit( line, commandLineInterface ){
+			if( EXIT_COMMAND_PATTERN.test( line ) ){
+				var exitCode = line.match( EXIT_COMMAND_PATTERN )[ 1 ];
+				
+				try{
+					exitCode = parseInt( exitCode );
 
-		exitCode = exitCode || 0;
-		
-		process.exit( exitCode );
-	}*/
+				}catch( error ){
+					console.warn( "an error was encountered due to an invalid exit code that was passed" );
+					console.warn( "please disregard this error for debugging purposes only" );
+					console.error( error );
+				}
+
+				exitCode = exitCode || 0;
+
+				if( this.checkIfOnCLISession( ) ){
+					this.fireEvent( CLI.EVENT.CLI_SESSION_ENDED, specificNamespace );
+				
+				}else{
+					process.exit( exitCode );	
+				}
+			}
+		} );
 };
 
 const EXIT_COMMAND_PATTERN = /^\@exit(?:\:(\d+)|$)/;
